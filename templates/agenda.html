@@ -1,6 +1,9 @@
 {% extends "model-page.html" %}
 {% block content %}
     <h2>Agendamentos</h2>
+    <a href="evento/">
+        <button type="button">Novo Evento</button>
+    </a>
     <ol>
         {% for evento in eventos %}
         <li><h3>{{ evento.titulo }}</h3></li>
@@ -11,7 +14,6 @@
             <li><p><ins>Data do Evento</ins>: {{ evento.get_data_evento }}</p></li>
             <li><p>Registrado por <ins>{{ evento.usuario }}</ins> em {{ evento.get_data_criacao }}</p></li>
         </ul>
-        <hr>
         {% endfor %}
     </ol>
 {% endblock %}
