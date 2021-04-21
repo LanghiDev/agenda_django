@@ -6,7 +6,19 @@
     </a>
     <ol>
         {% for evento in eventos %}
-        <li><h3>{{ evento.titulo }} ( <a href="evento/?id={{ evento.id }}">Editar</a> / <a href="delete/{{ evento.id }}">Excluir</a> )</h3></li>
+        <li><h3>
+            <div style={% if evento.get_evento_atrasado %}
+                         "color: rgb(255, 100, 100)"
+                        {% endif %}
+                        {% if evento.get_evento_quaseHora %}
+                        "color: rgb(255, 155, 70)"
+                        {% endif %}
+            >
+            {{ evento.titulo }}
+            ( <a href="evento/?id={{ evento.id }}">Editar</a> /
+            <a href="delete/{{ evento.id }}">Excluir</a> )
+            </div>
+        </h3></li>
         <ul>
             {% if evento.descricao != '' %}
             <li><p><ins>Descrição</ins>: {{ evento.descricao }}</p></li>
@@ -19,4 +31,7 @@
         </ul>
         {% endfor %}
     </ol>
+    <a href="historico/">
+        <button type="button">Eventos Passados</button>
+    </a>
 {% endblock %}
