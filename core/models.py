@@ -8,6 +8,7 @@ class Evento(models.Model):
     descricao = models.TextField(blank=True, null=True)
     data_evento = models.DateTimeField(verbose_name='Data do Evento')
     local = models.CharField(max_length=100, blank=True, null=True)
+    lixo = models.BooleanField(default=False)
     data_criacao = models.DateTimeField(auto_now=True)
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
 

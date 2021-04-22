@@ -52,22 +52,51 @@ def evento(request):
 
 
 @login_required(login_url='/login/')
-def delete_evento(request, id_evento):
+def delete_evento(request, id_evento=0):
     usuario = request.user
     try:
-        evento = Evento.objects.get(id=id_evento)
+        if id_evento != 0:
+            evento = Evento.objects.get(id=id_evento)
+            if usuario == evento.usuario:
+                if evento.lixo:
+                    evento.delete()
+                else:
+                    evento.lixo = True
+                    evento.save()
+            else:
+                raise Http404()
+        else:
+            evento = Evento.objects.filter(usuario=usuario)
+            for e in evento:
+                if e.lixo:
+                    e.delete()
     except Exception:
-        raise Http404()
-    if usuario == evento.usuario:
-        evento.delete()
-    else:
         raise Http404()
     return redirect('/')
 
 
 @login_required(login_url='/login/')
+def restore_evento(request, id_evento=0):
+    usuario = request.user
+    if id_evento != 0:
+        evento = Evento.objects.get(id=id_evento)
+        evento.lixo = False
+        evento.save()
+    else:
+        evento = Evento.objects.filter(usuario=usuario)
+        for e in evento:
+            if e.lixo == True:
+                e.lixo = False
+                e.save()
+    return redirect('/')
+
+
+@login_required(login_url='/login/')
 def deleted_eventos(request):
-    pass
+    usuario = request.user
+    evento = Evento.objects.filter(usuario=usuario)
+    dados = {'eventos': evento}
+    return render(request, 'lixeira.html', dados)
 
 
 @login_required(login_url='/login/')
@@ -78,6 +107,7 @@ def submit_evento(request):
             data_evento = request.POST.get('data_evento')
             descricao = request.POST.get('descricao')
             local = request.POST.get('local')
+            lixo = False
             usuario = request.user
             id_evento = request.POST.get('id_evento')
             if id_evento:
@@ -87,13 +117,15 @@ def submit_evento(request):
                     evento.data_evento = data_evento
                     evento.descricao = descricao
                     evento.local = local
+                    evento.lixo = lixo
                     evento.save()
             else:
                 Evento.objects.create(titulo=titulo,
                                   data_evento=data_evento,
                                   descricao=descricao,
                                   usuario=usuario,
-                                  local=local)
+                                  local=local,
+                                  lixo=lixo)
     except Exception:
         raise Http404()
     return redirect('/')
@@ -104,7 +136,7 @@ def json_lista_evento(request, id_usuario):
         usuario_dig = request.user
         if usuario_dig.id == id_usuario:
             usuario = User.objects.get(id=id_usuario)
-            evento = Evento.objects.filter(usuario=usuario).values('id', 'titulo')
+            evento = Evento.objects.filter(usuario=usuario).values('id', 'titulo', 'lixo')
         else:
             raise Http404()
     except Exception:

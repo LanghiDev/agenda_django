@@ -4,6 +4,8 @@
 <form action="submit" method="POST">{% csrf_token %}
     <h2>Evento</h2>
     <input type="number" name="id_evento" value="{{ evento.id }}" hidden />
+    <input type="radio" name="lixo" value="true" hidden />
+    <input type="radio" name="lixo" value="false" checked hidden />
     <label>Título</label><br>
     <input type="text" name="titulo" size="23" value="{{ evento.titulo }}" required="required"><br>
     <label>Data do Evento</label><br>

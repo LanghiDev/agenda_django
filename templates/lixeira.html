@@ -1,0 +1,18 @@
+{% extends "model-page.html" %}
+{% block content %}
+    <h2>Agendamentos Excluídos</h2>
+    <a href="../delete/all"><button type="button">Excluir Tudo</button></a>
+    <a href="../restore/all"><button type="button">Restaurar Tudo</button></a>
+    <ol>
+        {% for evento in eventos %}
+        {% if evento.lixo %}
+        <li><h3 style="color: gray;">{{ evento.titulo }}
+        ( <a href="../restore/{{ evento.id }}">Restaurar</a> /
+            <a href="../delete/{{ evento.id }}">Deletar</a> )</h3></li>
+        {% endif %}
+        {% endfor %}
+    </ol>
+    <a href="/">
+        <button type="button">Voltar</button>
+    </a>
+{% endblock %}

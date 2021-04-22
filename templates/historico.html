@@ -5,6 +5,7 @@
 <ol style="color: rgb(255, 100, 100)">
     {% for evento in eventos %}
     {% if evento.get_evento_atrasado %}
+    {% if not evento.lixo %}
     <li><h3>
         <div>
             {{ evento.titulo }}
@@ -23,6 +24,7 @@
             <li><p>Registrado por <ins>{{ evento.usuario }}</ins> em {{ evento.get_data_criacao }}</p></li>
     </ul>
 
+    {% endif %}
     {% endif %}
     {% endfor %}
 </ol>

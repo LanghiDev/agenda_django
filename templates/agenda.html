@@ -6,6 +6,7 @@
     </a>
     <ol>
         {% for evento in eventos %}
+        {% if not evento.lixo %}
         <li><h3>
             <div style={% if evento.get_evento_atrasado %}
                          "color: rgb(255, 100, 100)"
@@ -24,14 +25,18 @@
             <li><p><ins>Descrição</ins>: {{ evento.descricao }}</p></li>
             {% endif %}
             <li><p><ins>Data do Evento</ins>: {{ evento.get_data_evento }}</p></li>
-            {% if evento.local is not None %}
+            {% if evento.local != '' %}
             <li><p><ins>Local</ins>: {{ evento.local }}</p></li>
             {% endif %}
-            <li><p>Registrado por <ins>{{ evento.usuario }}</ins> em {{ evento.get_data_criacao }}</p></li>
+            <li><p>Criado em {{ evento.get_data_criacao }}</p></li>
         </ul>
+        {% endif %}
         {% endfor %}
     </ol>
     <a href="historico/">
         <button type="button">Eventos Passados</button>
+    </a><br><br>
+    <a href="lixeira/">
+        <button type="button">Lixeira</button>
     </a>
 {% endblock %}
